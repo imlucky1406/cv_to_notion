@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CV Form</title>
+</head>
+<body>
+
+<h2>Candidate Form</h2>
+
+<form id="form">
+
+  <input
+    type="text"
+    name="name"
+    placeholder="Name"
+    required
+  />
+
+  <br><br>
+
+  <input
+    type="email"
+    name="email"
+    id="email"
+    placeholder="Email"
+    required
+  />
+  <span id="email-error" style="color:red;"></span>
+
+  <br><br>
+
+  <input
+    type="tel"
+    name="phone"
+    id="phone"
+    placeholder="Phone number"
+    pattern="[0-9+\-\s()]{7,20}"
+    title="Enter a valid phone number"
+    required
+  />
+  <span id="phone-error" style="color:red;"></span>
+
+  <br><br>
+
+  <input
+    type="file"
+    name="cv"
+    accept=".pdf"
+    required
+  />
+
+  <br><br>
+
+  <button type="submit">
+    Submit
+  </button>
+
+</form>
+
+<script>
+const form = document.getElementById("form");
+const emailInput = document.getElementById("email");
+const phoneInput = document.getElementById("phone");
+const emailError = document.getElementById("email-error");
+const phoneError = document.getElementById("phone-error");
+
+async function checkUnique(field, value) {
+  const response = await fetch(
+    `/check-unique?${field}=${encodeURIComponent(value)}`
+  );
+  const data = await response.json();
+  return data;
+}
+
+async function validateField(input, errorEl, field) {
+  const value = input.value.trim();
+  errorEl.textContent = "";
+
+  if (!value) return true;
+
+  const data = await checkUnique(field, value);
+
+  if (!data.unique) {
+    errorEl.textContent = `This ${field} is already registered.`;
+    return false;
+  }
+
+  return true;
+}
+
+emailInput.addEventListener("blur", () => {
+  validateField(emailInput, emailError, "email");
+});
+
+phoneInput.addEventListener("blur", () => {
+  validateField(phoneInput, phoneError, "phone");
+});
+
+form.addEventListener(
+  "submit",
+  async (e) => {
+    e.preventDefault();
+
+    emailError.textContent = "";
+    phoneError.textContent = "";
+
+    const emailOk = await validateField(emailInput, emailError, "email");
+    const phoneOk = await validateField(phoneInput, phoneError, "phone");
+
+    if (!emailOk || !phoneOk) {
+      return;
+    }
+
+    const formData = new FormData(form);
+    const submitBtn = form.querySelector("button[type=submit]");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting...";
+
+    try {
+      const response = await fetch("/submit", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+
+      console.log(data);
+
+      if (!response.ok) {
+        if (data.field === "email") {
+          emailError.textContent = data.error;
+        } else if (data.field === "phone") {
+          phoneError.textContent = data.error;
+        } else {
+          alert(data.error || "Submission failed.");
+        }
+        return;
+      }
+
+      alert("Submitted!");
+      form.reset();
+    } catch (error) {
+      alert("Submission failed. Please try again.");
+      console.error(error);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit";
+    }
+  }
+);
+</script>
+
+</body>
+</html>
