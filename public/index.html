@@ -1,61 +1,772 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>CV Form</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join Appia — Candidate Application</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red-50: #fef2f2;
+      --red-100: #fee2e2;
+      --red-200: #fecaca;
+      --red-400: #f87171;
+      --red-500: #ef4444;
+      --red-600: #dc2626;
+      --red-700: #b91c1c;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-900: #111827;
+      --radius-xl: 0.75rem;
+      --radius-2xl: 1rem;
+      --radius-3xl: 1.5rem;
+      --shadow-card: 0 24px 60px rgba(15, 23, 42, 0.08);
+      --shadow-btn: 0 12px 32px rgba(239, 68, 68, 0.35);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      background: linear-gradient(180deg, #fafafa 0%, #ffffff 55%, rgba(254, 242, 242, 0.35) 100%);
+      background-attachment: fixed;
+      color: var(--gray-900);
+      min-height: 100vh;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Background accents */
+    .page-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .page-bg::before {
+      content: "";
+      position: absolute;
+      top: -8rem;
+      left: -8rem;
+      width: 24rem;
+      height: 24rem;
+      border-radius: 50%;
+      background: rgba(239, 68, 68, 0.1);
+      filter: blur(80px);
+    }
+    .page-bg::after {
+      content: "";
+      position: absolute;
+      bottom: -6rem;
+      right: -6rem;
+      width: 20rem;
+      height: 20rem;
+      border-radius: 50%;
+      background: rgba(248, 113, 113, 0.08);
+      filter: blur(80px);
+    }
+    .page-bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: linear-gradient(to bottom, black 40%, transparent);
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 72rem;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 2rem;
+    }
+
+    @media (min-width: 640px) {
+      .page { padding: 2.5rem 1.5rem 2.5rem; }
+    }
+
+    /* Header */
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      transition: opacity 0.15s;
+    }
+    .brand:hover { opacity: 0.88; }
+    /* Matches main site header: h-8 w-auto */
+    .brand-logo {
+      display: block;
+      height: 2rem;
+      width: auto;
+    }
+    @media (min-width: 640px) {
+      .brand-logo { height: 2.25rem; }
+    }
+    .header-badge {
+      display: none;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.375rem 0.875rem;
+      border-radius: 9999px;
+      border: 1px solid var(--red-200);
+      background: rgba(255,255,255,0.9);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--red-600);
+    }
+    @media (min-width: 640px) {
+      .header-badge { display: inline-flex; }
+    }
+
+    /* Layout */
+    .layout {
+      display: grid;
+      gap: 2.5rem;
+      align-items: start;
+    }
+    @media (min-width: 1024px) {
+      .layout {
+        grid-template-columns: 1fr 1.05fr;
+        gap: 4rem;
+      }
+    }
+
+    /* Info panel */
+    .info-panel { max-width: 32rem; }
+    .eyebrow {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      color: var(--red-500);
+    }
+    .info-title {
+      margin-top: 1rem;
+      font-size: clamp(1.75rem, 4vw, 2.75rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: var(--gray-900);
+    }
+    .info-title em {
+      font-style: normal;
+      color: var(--red-500);
+    }
+    .info-desc {
+      margin-top: 1.25rem;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--gray-600);
+    }
+    .info-cards {
+      margin-top: 2rem;
+      display: grid;
+      gap: 0.875rem;
+    }
+    @media (min-width: 640px) {
+      .info-cards { grid-template-columns: 1fr 1fr; }
+    }
+    .info-card {
+      display: flex;
+      gap: 0.875rem;
+      padding: 1.125rem;
+      border-radius: var(--radius-2xl);
+      border: 1px solid var(--gray-100);
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .info-card-icon {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: var(--radius-xl);
+      background: var(--red-50);
+      color: var(--red-500);
+    }
+    .info-card-icon svg { width: 1.25rem; height: 1.25rem; }
+    .info-card-label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gray-500);
+    }
+    .info-card-value {
+      margin-top: 0.25rem;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+    .steps {
+      margin-top: 1.75rem;
+      padding: 1.25rem 1.5rem;
+      border-radius: var(--radius-2xl);
+      border: 1px solid var(--gray-100);
+      background: rgba(255,255,255,0.8);
+    }
+    .steps-title {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gray-500);
+    }
+    .steps-list {
+      margin-top: 0.875rem;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+    }
+    .steps-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.625rem;
+      font-size: 0.875rem;
+      color: var(--gray-600);
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 1.375rem;
+      height: 1.375rem;
+      border-radius: 50%;
+      background: var(--red-50);
+      color: var(--red-600);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Form card */
+    .form-card {
+      position: relative;
+      border-radius: var(--radius-3xl);
+      border: 1px solid var(--gray-100);
+      background: #fff;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-card);
+    }
+    @media (min-width: 640px) {
+      .form-card { padding: 2rem 2.5rem; }
+    }
+    .form-card-title {
+      font-size: 1.375rem;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+    @media (min-width: 640px) {
+      .form-card-title { font-size: 1.5rem; }
+    }
+    .form-card-sub {
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--gray-500);
+    }
+
+    .form-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      border-radius: var(--radius-3xl);
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .form-overlay.active { display: flex; }
+    .spinner {
+      width: 2.5rem;
+      height: 2.5rem;
+      border: 3px solid var(--red-100);
+      border-top-color: var(--red-500);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .overlay-text {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--gray-700);
+    }
+
+    /* Form fields */
+    .form { margin-top: 2rem; }
+    .field { margin-bottom: 1.25rem; }
+    .field-row {
+      display: grid;
+      gap: 1.25rem;
+    }
+    @media (min-width: 640px) {
+      .field-row { grid-template-columns: 1fr 1fr; }
+    }
+    .label {
+      display: block;
+      margin-bottom: 0.375rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--gray-700);
+    }
+    .required { color: var(--red-500); }
+    .input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--gray-200);
+      background: #fff;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      color: var(--gray-900);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .input::placeholder { color: var(--gray-400); }
+    .input:hover:not(:disabled) { border-color: var(--gray-300, #d1d5db); }
+    .input:focus {
+      outline: none;
+      border-color: #fca5a5;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+    }
+    .input.error { border-color: var(--red-400); }
+    .input:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .field-error {
+      display: block;
+      margin-top: 0.375rem;
+      font-size: 0.8125rem;
+      color: var(--red-600);
+      min-height: 1.25rem;
+    }
+
+    /* Employment type cards */
+    .fieldset { border: none; }
+    .fieldset-legend {
+      display: block;
+      margin-bottom: 0.75rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--gray-700);
+    }
+    .radio-grid {
+      display: grid;
+      gap: 0.625rem;
+    }
+    @media (min-width: 480px) {
+      .radio-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .radio-card {
+      position: relative;
+      cursor: pointer;
+    }
+    .radio-card input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .radio-card-face {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 0.75rem;
+      border-radius: var(--radius-xl);
+      border: 1.5px solid var(--gray-200);
+      background: var(--gray-50);
+      text-align: center;
+      transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+    }
+    .radio-card-face svg {
+      width: 1.375rem;
+      height: 1.375rem;
+      color: var(--gray-400);
+      transition: color 0.15s;
+    }
+    .radio-card-label {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      transition: color 0.15s;
+    }
+    .radio-card:hover .radio-card-face {
+      border-color: var(--red-200);
+      background: #fff;
+    }
+    .radio-card input:checked + .radio-card-face {
+      border-color: var(--red-500);
+      background: var(--red-50);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+    }
+    .radio-card input:checked + .radio-card-face svg { color: var(--red-500); }
+    .radio-card input:checked + .radio-card-face .radio-card-label { color: var(--red-700); }
+    .radio-card input:focus-visible + .radio-card-face {
+      outline: 2px solid var(--red-500);
+      outline-offset: 2px;
+    }
+
+    /* File upload */
+    .file-zone {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.625rem;
+      padding: 2rem 1.5rem;
+      border-radius: var(--radius-xl);
+      border: 2px dashed var(--gray-200);
+      background: var(--gray-50);
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .file-zone:hover,
+    .file-zone.dragover {
+      border-color: var(--red-300, #fca5a5);
+      background: var(--red-50);
+    }
+    .file-zone.has-file {
+      border-style: solid;
+      border-color: var(--red-200);
+      background: var(--red-50);
+    }
+    .file-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .file-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 3rem;
+      height: 3rem;
+      border-radius: var(--radius-xl);
+      background: #fff;
+      color: var(--red-500);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .file-icon svg { width: 1.5rem; height: 1.5rem; }
+    .file-title {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--gray-700);
+    }
+    .file-hint {
+      font-size: 0.8125rem;
+      color: var(--gray-500);
+    }
+    .file-name {
+      display: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--red-600);
+      word-break: break-all;
+    }
+    .file-zone.has-file .file-name { display: block; }
+    .file-zone.has-file .file-default { display: none; }
+
+    /* Submit */
+    .submit-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      margin-top: 0.5rem;
+      padding: 0.875rem 2rem;
+      border: none;
+      border-radius: 9999px;
+      background: var(--red-500);
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--shadow-btn);
+      transition: background 0.15s, transform 0.15s, opacity 0.15s;
+    }
+    .submit-btn:hover:not(:disabled) {
+      background: var(--red-600);
+      transform: translateY(-2px);
+    }
+    .submit-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .submit-btn svg { width: 1rem; height: 1rem; }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.875rem 1.25rem;
+      border-radius: var(--radius-2xl);
+      background: var(--gray-900);
+      color: #fff;
+      font-size: 0.875rem;
+      font-weight: 500;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+      max-width: calc(100vw - 2rem);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .toast.show {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .toast.success .toast-icon { color: #4ade80; }
+    .toast.error .toast-icon { color: var(--red-400); }
+    .toast-icon svg { width: 1.125rem; height: 1.125rem; flex-shrink: 0; }
+
+    .footer-note {
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--gray-100);
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--gray-400);
+    }
+    .footer-note a {
+      color: var(--red-500);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .footer-note a:hover { text-decoration: underline; }
+  </style>
 </head>
 <body>
 
-<h2>Candidate Form</h2>
+  <div class="page-bg" aria-hidden="true">
+    <div class="page-bg-grid"></div>
+  </div>
 
-<form id="form">
+  <div class="page">
+    <header class="site-header">
+      <a href="https://www.appia.in" class="brand" target="_blank" rel="noopener">
+        <img
+          src="/APPIA-RB.png"
+          alt="Appia Consultancy Services logo — return to home"
+          class="brand-logo"
+          width="160"
+          height="80"
+        />
+      </a>
+      <span class="header-badge">Careers &amp; Talent</span>
+    </header>
 
-  <input
-    type="text"
-    name="name"
-    placeholder="Name"
-    required
-  />
+    <div class="layout">
+      <!-- Left info -->
+      <aside class="info-panel">
+        <p class="eyebrow">Join our team</p>
+        <h1 class="info-title">
+          Share your profile and <em>grow with Appia</em>
+        </h1>
+        <p class="info-desc">
+          We're always looking for talented professionals across IT outsourcing,
+          staffing, and digital engineering. Submit your details and resume — our
+          team will review your application and reach out when there's a fit.
+        </p>
 
-  <br><br>
+        <div class="info-cards">
+          <div class="info-card">
+            <div class="info-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div>
+              <p class="info-card-label">Call us</p>
+              <p class="info-card-value">+91 63522 17192</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
+            <div>
+              <p class="info-card-label">Email us</p>
+              <p class="info-card-value">sales@appia.in</p>
+            </div>
+          </div>
+        </div>
 
-  <input
-    type="email"
-    name="email"
-    id="email"
-    placeholder="Email"
-    required
-  />
-  <span id="email-error" style="color:red;"></span>
+        <div class="steps">
+          <p class="steps-title">What happens next</p>
+          <ol class="steps-list">
+            <li><span class="step-num">1</span> Submit your details and PDF resume</li>
+            <li><span class="step-num">2</span> Our team reviews your profile</li>
+            <li><span class="step-num">3</span> We'll reach out if there's a match</li>
+          </ol>
+        </div>
+      </aside>
 
-  <br><br>
+      <!-- Form -->
+      <div class="form-card">
+        <div class="form-overlay" id="form-overlay" aria-busy="false" aria-live="polite">
+          <div class="spinner" aria-hidden="true"></div>
+          <span class="overlay-text">Submitting your application…</span>
+        </div>
 
-  <input
-    type="tel"
-    name="phone"
-    id="phone"
-    placeholder="Phone number"
-    pattern="[0-9+\-\s()]{7,20}"
-    title="Enter a valid phone number"
-    required
-  />
-  <span id="phone-error" style="color:red;"></span>
+        <h2 class="form-card-title">Candidate application</h2>
+        <p class="form-card-sub">All fields are required. Resume must be a PDF file.</p>
 
-  <br><br>
+        <form id="form" class="form" novalidate>
+          <div class="field-row">
+            <div class="field">
+              <label class="label" for="name">Full name <span class="required">*</span></label>
+              <input
+                class="input"
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Your full name"
+                autocomplete="name"
+                required
+              />
+            </div>
+            <div class="field">
+              <label class="label" for="phone">Phone number <span class="required">*</span></label>
+              <input
+                class="input"
+                type="tel"
+                name="phone"
+                id="phone"
+                placeholder="+91 …"
+                pattern="[0-9+\-\s()]{7,20}"
+                title="Enter a valid phone number"
+                autocomplete="tel"
+                required
+              />
+              <span class="field-error" id="phone-error" role="alert"></span>
+            </div>
+          </div>
 
-  <input
-    type="file"
-    name="cv"
-    accept=".pdf"
-    required
-  />
+          <div class="field">
+            <label class="label" for="email">Email address <span class="required">*</span></label>
+            <input
+              class="input"
+              type="email"
+              name="email"
+              id="email"
+              placeholder="you@company.com"
+              autocomplete="email"
+              required
+            />
+            <span class="field-error" id="email-error" role="alert"></span>
+          </div>
 
-  <br><br>
+          <div class="field">
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend">Employment type <span class="required">*</span></legend>
+              <div class="radio-grid">
+                <label class="radio-card">
+                  <input type="radio" name="employmentType" value="Self employed" required />
+                  <div class="radio-card-face">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span class="radio-card-label">Self employed</span>
+                  </div>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="employmentType" value="Freelancer" />
+                  <div class="radio-card-face">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    <span class="radio-card-label">Freelancer</span>
+                  </div>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="employmentType" value="Employee" />
+                  <div class="radio-card-face">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <span class="radio-card-label">Employee</span>
+                  </div>
+                </label>
+              </div>
+              <span class="field-error" id="employment-error" role="alert"></span>
+            </fieldset>
+          </div>
 
-  <button type="submit">
-    Submit
-  </button>
+          <div class="field">
+            <span class="label">Resume (PDF) <span class="required">*</span></span>
+            <div class="file-zone" id="file-zone">
+              <input
+                type="file"
+                name="cv"
+                id="cv"
+                accept=".pdf,application/pdf"
+                required
+              />
+              <div class="file-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+              </div>
+              <div class="file-default">
+                <p class="file-title">Drag &amp; drop your resume here</p>
+                <p class="file-hint">or click to browse — PDF only, max 10 MB</p>
+              </div>
+              <p class="file-name" id="file-name"></p>
+            </div>
+          </div>
 
-</form>
+          <button type="submit" class="submit-btn" id="submit-btn">
+            <span id="submit-text">Submit application</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <p class="footer-note">
+      Powered by <a href="https://www.appia.in" target="_blank" rel="noopener">Appia Consultancy Services</a>
+      — India's trusted staffing &amp; IT outsourcing partner.
+    </p>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="toast-icon" id="toast-icon" aria-hidden="true"></span>
+    <span id="toast-message"></span>
+  </div>
 
 <script>
 const form = document.getElementById("form");
@@ -63,18 +774,48 @@ const emailInput = document.getElementById("email");
 const phoneInput = document.getElementById("phone");
 const emailError = document.getElementById("email-error");
 const phoneError = document.getElementById("phone-error");
+const employmentError = document.getElementById("employment-error");
+const formOverlay = document.getElementById("form-overlay");
+const submitBtn = document.getElementById("submit-btn");
+const submitText = document.getElementById("submit-text");
+const fileZone = document.getElementById("file-zone");
+const fileInput = document.getElementById("cv");
+const fileNameEl = document.getElementById("file-name");
+const toast = document.getElementById("toast");
+const toastMessage = document.getElementById("toast-message");
+const toastIcon = document.getElementById("toast-icon");
+
+let toastTimer = null;
+
+function showToast(message, type = "success") {
+  clearTimeout(toastTimer);
+  toast.className = `toast ${type}`;
+  toastMessage.textContent = message;
+  toastIcon.innerHTML = type === "success"
+    ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'
+    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>';
+  toast.classList.add("show");
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 4500);
+}
+
+function setLoading(active) {
+  formOverlay.classList.toggle("active", active);
+  formOverlay.setAttribute("aria-busy", active);
+  submitBtn.disabled = active;
+  submitText.textContent = active ? "Submitting…" : "Submit application";
+}
 
 async function checkUnique(field, value) {
   const response = await fetch(
     `/check-unique?${field}=${encodeURIComponent(value)}`
   );
-  const data = await response.json();
-  return data;
+  return response.json();
 }
 
 async function validateField(input, errorEl, field) {
   const value = input.value.trim();
   errorEl.textContent = "";
+  input.classList.remove("error");
 
   if (!value) return true;
 
@@ -82,6 +823,7 @@ async function validateField(input, errorEl, field) {
 
   if (!data.unique) {
     errorEl.textContent = `This ${field} is already registered.`;
+    input.classList.add("error");
     return false;
   }
 
@@ -96,58 +838,110 @@ phoneInput.addEventListener("blur", () => {
   validateField(phoneInput, phoneError, "phone");
 });
 
-form.addEventListener(
-  "submit",
-  async (e) => {
+form.querySelectorAll('input[name="employmentType"]').forEach((radio) => {
+  radio.addEventListener("change", () => {
+    employmentError.textContent = "";
+  });
+});
+
+fileInput.addEventListener("change", () => {
+  const file = fileInput.files[0];
+  if (file) {
+    fileNameEl.textContent = file.name;
+    fileZone.classList.add("has-file");
+  } else {
+    fileNameEl.textContent = "";
+    fileZone.classList.remove("has-file");
+  }
+});
+
+["dragenter", "dragover"].forEach((evt) => {
+  fileZone.addEventListener(evt, (e) => {
     e.preventDefault();
+    fileZone.classList.add("dragover");
+  });
+});
 
-    emailError.textContent = "";
-    phoneError.textContent = "";
+["dragleave", "drop"].forEach((evt) => {
+  fileZone.addEventListener(evt, () => {
+    fileZone.classList.remove("dragover");
+  });
+});
 
-    const emailOk = await validateField(emailInput, emailError, "email");
-    const phoneOk = await validateField(phoneInput, phoneError, "phone");
+fileZone.addEventListener("drop", (e) => {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (file && file.type === "application/pdf") {
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    fileInput.files = dt.files;
+    fileNameEl.textContent = file.name;
+    fileZone.classList.add("has-file");
+  }
+});
 
-    if (!emailOk || !phoneOk) {
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  emailError.textContent = "";
+  phoneError.textContent = "";
+  employmentError.textContent = "";
+  emailInput.classList.remove("error");
+  phoneInput.classList.remove("error");
+
+  const emailOk = await validateField(emailInput, emailError, "email");
+  const phoneOk = await validateField(phoneInput, phoneError, "phone");
+
+  if (!emailOk || !phoneOk) return;
+
+  if (!form.querySelector('input[name="employmentType"]:checked')) {
+    employmentError.textContent = "Please select an employment type.";
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const formData = new FormData(form);
+    const response = await fetch("/submit", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await response.json();
+    console.log(data);
+
+    if (!response.ok) {
+      if (data.field === "email") {
+        emailError.textContent = data.error;
+        emailInput.classList.add("error");
+      } else if (data.field === "phone") {
+        phoneError.textContent = data.error;
+        phoneInput.classList.add("error");
+      } else if (data.field === "employmentType") {
+        employmentError.textContent = data.error;
+      } else {
+        showToast(data.error || "Submission failed.", "error");
+      }
       return;
     }
 
-    const formData = new FormData(form);
-    const submitBtn = form.querySelector("button[type=submit]");
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Submitting...";
-
-    try {
-      const response = await fetch("/submit", {
-        method: "POST",
-        body: formData
-      });
-
-      const data = await response.json();
-
-      console.log(data);
-
-      if (!response.ok) {
-        if (data.field === "email") {
-          emailError.textContent = data.error;
-        } else if (data.field === "phone") {
-          phoneError.textContent = data.error;
-        } else {
-          alert(data.error || "Submission failed.");
-        }
-        return;
-      }
-
-      alert("Submitted!");
-      form.reset();
-    } catch (error) {
-      alert("Submission failed. Please try again.");
-      console.error(error);
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Submit";
+    if (data.geminiUsed === false) {
+      showToast("Application saved. Resume details could not be extracted.", "success");
+    } else {
+      showToast("Application submitted successfully!", "success");
     }
+
+    form.reset();
+    fileZone.classList.remove("has-file");
+    fileNameEl.textContent = "";
+  } catch (error) {
+    showToast("Submission failed. Please try again.", "error");
+    console.error(error);
+  } finally {
+    setLoading(false);
   }
-);
+});
 </script>
 
 </body>
